@@ -36,9 +36,7 @@ The project provides several [NPM scripts](https://docs.npmjs.com/cli/v6/using-n
 npm run lint            # runs code linter
 npm run lint:fix        # attempts to automatically fix linting issues
 npm run clean           # removes reports from any previous test run
-npm test:web            # executes the web test suite
-npm test:mobile         # executes the mobile test suite
-npm test:api            # executes the api test suite
+npm run test            # executes the web test suite
                         # and generates the report under ./target/site/serenity
 npm start               # starts a mini HTTP server and serves the test reports
                         # at http://localhost:8080
