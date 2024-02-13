@@ -10,14 +10,9 @@ Feature: Count Characters
     Then the character count should be "<expected_chars>"
 
     Examples: 
-      | message               | expected_chars |
-      | This is a simple text |             21 |
-      | Up the Irons!         |             13 |
-      | !#%@=)(%?             |              9 |
-      |                       |              0 |
-
-  #@character_counter
-  #Scenario: Rendering character counting in a random text
-    #When he enters a random text
-    #And he adds or remove characters in text
-    #Then the character count should be updated successfully
+      | message                                | expected_chars |
+      | Another text to count their characters |             38 |
+      | Javascript is better than Java?!       |             32 |
+      | !#%@=) (%?                             |             10 |
+      |                                  12345 |              5 |
+      |                                        |              0 |

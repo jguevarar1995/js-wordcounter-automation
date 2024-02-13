@@ -1,7 +1,7 @@
 import { Ensure, equals } from '@serenity-js/assertions'
 import { actorInTheSpotlight,TestCompromisedError } from '@serenity-js/core'
 
-import { getText } from '../helpers/actions'
+import { getTextOfAllElements, getTextOfElement } from '../helpers/actions'
 import { mainPageUi } from '../ui/mainPageUi'
 
 export const counter = {
@@ -12,6 +12,15 @@ export const counter = {
         )
     },
     getCount : async(type: string) : Promise<string> => {
-        return await getText(mainPageUi.countValueItem(type))
+        return await getTextOfElement(mainPageUi.countValueItem(type))
+    },
+    getKeywordDensityData: async(type: string) : Promise<string[]> => {
+        return await getTextOfAllElements(mainPageUi.keywordDensityItemList(type))
+    },
+    verifyKewordDensityValues : async(expectedDensityValues: [string, number] [], currentDensityValues: [string, number][]) : Promise<void> => {
+        await actorInTheSpotlight().attemptsTo(
+            Ensure.that(expectedDensityValues, equals(currentDensityValues))
+                .otherwiseFailWith(TestCompromisedError, `The current density values: ${currentDensityValues} are not equal to expeted density values: ${expectedDensityValues}`)
+        )
     }
 }

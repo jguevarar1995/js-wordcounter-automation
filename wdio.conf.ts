@@ -17,7 +17,6 @@ export const config: WebdriverIOConfig = {
                 outputDirectory: 'target/site/serenity' 
             } ],
             [ '@serenity-js/web:Photographer', {
-                // strategy: 'TakePhotosOfFailures'
                 strategy: 'TakePhotosOfInteractions'
             } ],
         ]

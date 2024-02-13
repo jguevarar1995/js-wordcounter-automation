@@ -1,4 +1,4 @@
-import { actorInTheSpotlight,Answerable, Duration, MetaQuestionAdapter, Wait } from '@serenity-js/core'
+import { actorInTheSpotlight,Answerable, Duration, MetaList, MetaQuestionAdapter, Wait } from '@serenity-js/core'
 import { isVisible,PageElement } from '@serenity-js/web'
 import { Click,Enter,Key,Press,Text } from '@serenity-js/web';
 
@@ -14,8 +14,12 @@ export const enterValue = async (element: MetaQuestionAdapter<PageElement<unknow
     return Enter.theValue(value).into(element)
 }
 
-export const getText = async(element: MetaQuestionAdapter<PageElement<unknown>, PageElement<unknown>>): Promise<any> => {
+export const getTextOfElement = async(element: MetaQuestionAdapter<PageElement<unknown>, PageElement<unknown>>): Promise<string> => {
     return await actorInTheSpotlight().answer(Text.of(element))
+}
+
+export const getTextOfAllElements = async(elements: MetaList<PageElement<unknown>, PageElement<unknown>>): Promise<string[]> => {
+    return await actorInTheSpotlight().answer(Text.ofAll(elements))
 }
 
 export const pressKeyInElement = async(keys: Key | Key[], element: MetaQuestionAdapter<PageElement<unknown>, PageElement<unknown>>, timeOut = customConstants.elementDefaultTimeOut): Promise<any> => {

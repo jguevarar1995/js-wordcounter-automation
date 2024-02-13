@@ -1,6 +1,7 @@
 import { actorInTheSpotlight,Duration, Wait } from '@serenity-js/core'
 import { isVisible, Key } from '@serenity-js/web'
 
+import { customConstants } from '../constants/customConstants'
 import { click, enterValue, pressKeyInElement } from '../helpers/actions'
 import { mainPageUi } from '../ui/mainPageUi'
 import { getWordMetadata } from '../util/word'
@@ -11,7 +12,7 @@ export const count = {
         await actorInTheSpotlight().attemptsTo(
             await enterValue(mainPageUi.wordTextInputArea(), message.trim()),
             Wait.upTo(Duration.ofSeconds(59))
-                .until(mainPageUi.countValueItem('word'), isVisible())
+                .until(mainPageUi.countValueItem(customConstants.wordCountElementReference), isVisible())
         )
     },
     updateInfo: async (option: string, message: string): Promise<string> => {
@@ -28,14 +29,14 @@ export const count = {
         const wordsInMessage = getWordMetadata.wordListInMessage(message)
         const wordQuantity = Number.parseInt(getWordMetadata.wordQuantity(wordsInMessage))
         const wordsRemaining = Math.floor(Math.random() * (wordQuantity - 1)) + 1
-        const message1 = wordQuantity <= 1 ? '' : wordsInMessage.slice(0, wordsRemaining).join(' ')
+        const updatedMessage = wordQuantity <= 1 ? '' : wordsInMessage.slice(0, wordsRemaining).join(' ')
 
-        const difference = wordQuantity === wordsRemaining ? 1 : wordQuantity - wordsRemaining
+        const quantityRemoved = wordQuantity === wordsRemaining ? 1 : wordQuantity - wordsRemaining
 
         await actorInTheSpotlight().attemptsTo( 
             await click(mainPageUi.clearButton()),
-            await enterValue(mainPageUi.wordTextInputArea(), message1)
+            await enterValue(mainPageUi.wordTextInputArea(), updatedMessage)
         )
-        return `${difference} removed`
+        return `${quantityRemoved} removed`
     }
 }
