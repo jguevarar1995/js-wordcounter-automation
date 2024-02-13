@@ -5,13 +5,13 @@ import { getText } from '../helpers/actions'
 import { mainPageUi } from '../ui/mainPageUi'
 
 export const counter = {
-    checkWordsCount : async(expectedWords: string, currentCount: string) : Promise<void> => {
+    checkCount : async(expectedCountValue: string, currentCountValue: string, type: string) : Promise<void> => {
         await actorInTheSpotlight().attemptsTo(
-            Ensure.that(expectedWords, equals(currentCount))
-                .otherwiseFailWith(TestCompromisedError, `The current words: ${currentCount} is not equal to expeted count: ${expectedWords}`)
+            Ensure.that(expectedCountValue, equals(currentCountValue))
+                .otherwiseFailWith(TestCompromisedError, `The current ${type} count: ${currentCountValue} is not equal to expeted count: ${expectedCountValue}`)
         )
-    }, 
-    getWordsCount : async() : Promise<string> => {
-        return await getText(mainPageUi.wordCountValueItem())
     },
+    getCount : async(type: string) : Promise<string> => {
+        return await getText(mainPageUi.countValueItem(type))
+    }
 }

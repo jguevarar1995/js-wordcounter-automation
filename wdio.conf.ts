@@ -1,12 +1,14 @@
 import { WebdriverIOConfig } from '@serenity-js/webdriverio';
 import { resolve } from 'path';
 import { wdioOptions } from './src/helpers/wdioOptions';
+import { Actors } from './src';
 
 export const config: WebdriverIOConfig = {
 
     framework: '@serenity-js/webdriverio',
 
     serenity: {
+        actors: new Actors(),
         runner: 'cucumber',
         crew: [
             '@serenity-js/console-reporter',
@@ -64,16 +66,19 @@ export const config: WebdriverIOConfig = {
             excludeSwitches: [ 'enable-automation' ],
             args: [
                 //'--headless',
+                '--disable-infobars',
+                '--disable-popup-blocking',
                 '--no-sandbox',
                 '--disable-gpu',
-                '--window-size=1920,1080',
-                '--incognito'
-                //'--start-fullscreen'
+                //'--window-size=1920,1080',
+                '--start-maximized'
             ],
         }
     }],
 
     logLevel: 'warn',
+
+    bail: 0,
 
     baseUrl: process.env.BASE_URL,
 
