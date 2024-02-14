@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Rendering word counting in a random text</title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff"><link rel="stylesheet" href="bootstrap-icons/font/bootstrap-icons.css"><!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script><link rel="stylesheet" type="text/css" href="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.css">
+<link rel="stylesheet" type="text/css" href="chartist/dist/chartist.min.css">
+<script src="chartist/dist/chartist.min.js"></script>
+<script src="chartist/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
+<!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
+<!--CHART.JS-->
+<script src="chartjs/chart.js"></script>
+<script src="chartjs/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="chartjs/chartjs-plugin-doughnutlabel.min.js"></script>
+<script src="chartjs/patternomaly.min.js"></script>
+<!-- JQuery-UI -->
+<link type="text/css" href="jqueryui/1.11.2-start/jquery-ui.min.css" rel="Stylesheet" />
+<script type="text/javascript" src="jqueryui/1.11.2-start/jquery-ui.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/1.10.20/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/1.10.20/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="datatables/1.10.20/datatables.bootstrap4.min.js"></script>
+<link type="text/css" href="datatables/1.10.20/datatables.bootstrap4.min.css" rel="stylesheet" />
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<!-- ImgPreview -->
+<script src="scripts/imgpreview.full.jquery.js" type="text/javascript"></script>
+</head>
+
+<body class="results-page">
+
+
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle">JS-Wordcounter-Web-Automation</span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+    <div id="contenttop">
+        <div class="middlebg">
+        <span class="breadcrumbs">
+            <a href="index.html" class="breadcrumbs">Home</a>
+
+            > <a href="14abb9f60a615cf47eb9762e536d36cb8e3e16e05a4df282c215f41287259ad1.html">Word Counter</a>
+            > <a href="0c9316249a7af3a3283ca6e8f05522bc7f2f4ee6cc2c84ded16b5662d855a057.html">Count Words</a>
+        > Rendering word counting in a random text
+        </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="7ea0a5e2d679b9deeda9910ae4a9bcd3a281e0d908303a9e16e486103e98880c.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="576946480b52ad056d6f5bddf874399c83582ecf90963cc074a14c70580e7d9f.html"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 14-02-2024 18:11</span>
+    <br style="clear:left"/>
+</div>
+    <div class="clr"></div>
+
+
+    <div id="contentbody">
+        <div class="titlebar">
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td>
+                                <div>
+                                    <h3 class="discreet-story-header">
+                                        <i class="fs-2 bi bi-chat-left-quote title-icon"></i>
+                                        <span class="story-header-title">Count Words </span>
+                                    </h3>
+
+                                </div>
+
+                        </td>
+                        <td valign="top">
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="d37456d30678fb78fd44c6da4f0b95a2c4ffe12c85db4f2c47fb79334207de1c.html">Render Counter
+                                    (tag)</a>
+                                </span>
+                                </p>
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="186c771ff58119a55161188dce8e4c9374a59cd477e075c06fb94d1197e396ca.html">Windows
+                                    (platform)</a>
+                                </span>
+                                </p>
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="14abb9f60a615cf47eb9762e536d36cb8e3e16e05a4df282c215f41287259ad1.html">Word Counter
+                                    (capability)</a>
+                                </span>
+                                </p>
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="1d0c02fb9cb969bbd9e2f900ec6333e01b070c6fb5e26345e9374169cfab9e68.html">Regression
+                                    (tag)</a>
+                                </span>
+                                </p>
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="6c5512236937b92cd7a296b24edb966c2bd94be46b8910f8b129a42d6150eb25.html">1 To 10 Seconds
+                                    (Duration)</a>
+                                </span>
+                                </p>
+                                <p class="tag">
+                                    <span class="badge tag-badge" style="background:default;">
+                                    <i class="bi bi-tag-fill"></i>&nbsp;<a class="tagLink" style="background:default;"
+                                                                      href="f2fffa8a377b530b54a21c8077ebe0b2e6417f93f75e87a9b201ba5318bb1475.html">Chrome 121.0.6167.161
+                                    (browser)</a>
+                                </span>
+                                </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="story-title">
+                <table class="outcome-header">
+                    <tr>
+                        <td colspan="2" class="test-title-bar">
+                            <span class="outcome-icon"><a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon fa-2x' title='COMPROMISED'></i></a></span>
+                            <span class="test-case-title">
+                                <span class="compromised-color">
+                                    Rendering word counting in a random text
+                                        <span class="related-issue-title"></span>
+                                </span>
+                            </span>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+</div>
+</div>
+
+<div class="clr"></div>
+
+    <div class="story-title">
+        <h3 class="story-header">Scenario Outline</h3>
+
+        <div class="scenario">When he enters a random text<br>And he "&lt;action&gt;" words in text<br>Then the word count should be updated successfully</div>
+
+    </div>
+
+<div id="beforetable"></div>
+
+
+        <h3 class="story-header">Examples:&nbsp;</h3>
+            <div class="requirementNarrative"></div>
+
+
+            <p class="example-tag">
+            </p>
+
+        <div class="example-table test-report">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                        <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="test-SUCCESS"><a href="#0">1</a></td>
+                            <td class="test-SUCCESS"><a
+                                        href="#0">adds</a>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td class="test-COMPROMISED"><a href="#1">2</a></td>
+                            <td class="test-COMPROMISED"><a
+                                        href="#1">remove</a>
+                            </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+<div id="tablecontents">
+    <div>
+        <table class="step-table">
+            <tr class="step-titles">
+                <th width="65">
+                </th>
+                <th class="step-description-column greentext">
+                    Steps
+                </th>
+
+                    <th width="150" class="greentext">Screenshots</th>
+                <th width="130" class="greentext">Outcome</th>
+                <th width="100" class="greentext"><i title="Duration" class="bi bi-stopwatch"></i></th>
+            </tr>
+            <tr class="step-table-separator">
+                <td colspan="5"></td>
+            </tr>
+
+                <tr class="test-SUCCESS">
+
+                    <td width="50" class="step-icon">
+                        <a name="0"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0 success-icon"
+                                   style="margin-left: 20px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0')"
+                               style="display:block;">
+                                <span class="top-level-step">
+                                                Rendering word counting in a random text #1 - action: adds
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=0">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=15">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
+                    <td width="100"><span class="top-level-step">3s 365ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="0-0"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-0')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0-0 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-0')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Given Juan opens the WordCounter website
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=2">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">649ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0-0" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-0-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan navigates to '/'
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=2">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-710b33ad2c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">337ms</span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="0-1"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-1')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0-1 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-1')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                When he enters a random text
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=3">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-district-sternly-onto-3b7d242424.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-district-sternly-onto-3b7d242424.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=8">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-9a9798a89c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-9a9798a89c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">880ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0-1" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-1-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan enters 'district sternly onto uh-huh psst majestically' into the text area for words
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=4">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-district-sternly-onto-3b7d242424.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-district-sternly-onto-3b7d242424.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">148ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-1-1"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan waits until the word_count count value item does become visible
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=5">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-d8d442edcb.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-d8d442edcb.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">166ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-1-2"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-1-2')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0-1-2 success-icon"
+                                   style="margin-left: 60px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-1-2')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Juan takes note of word_count
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=6">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-9a9798a89c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-9a9798a89c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=8">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-9a9798a89c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-9a9798a89c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">002ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0-1-2" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="110" class="step-icon">
+                        <a name="0-1-2-0"></a>
+                            <span style="margin-left: 80px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan takes note of initial_message
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=7">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-9a9798a89c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-9a9798a89c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">001ms</span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="0-2"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-2')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0-2 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-2')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                And he "adds" words in text
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=9">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-presses-key-enter-in-the-text-30fd3ac9ac.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-presses-key-enter-in-the-text-30fd3ac9ac.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=13">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-4b503871ab.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-4b503871ab.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">1s 382ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0-2" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-2-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan presses key Enter in the text area for words
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=10">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-presses-key-enter-in-the-text-30fd3ac9ac.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-presses-key-enter-in-the-text-30fd3ac9ac.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">436ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-2-1"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan enters 'smoothly inasmuch furthermore' into the text area for words
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=11">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-smoothly-inasmuch-fur-a754686094.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-smoothly-inasmuch-fur-a754686094.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">129ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-2-2"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan waits until the word_count count value item does become visible
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=12">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-6436c6930f.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-6436c6930f.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">170ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-2-3"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan takes note of updated_counter
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=13">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-4b503871ab.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-4b503871ab.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step"></span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="0-3"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-3')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection0-3 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection0-3')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Then the word count should be updated successfully
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=15">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">438ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection0-3" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="0-3-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan ensures that '9' does equal '9'
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=15">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-9-does-equal-4b503871ab.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">002ms</span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-COMPROMISED">
+
+                    <td width="50" class="step-icon">
+                        <a name="1"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1 compromised-icon"
+                                   style="margin-left: 20px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1')"
+                               style="display:block;">
+                                <span class="top-level-step">
+                                                Rendering word counting in a random text #2 - action: remove
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="COMPROMISED-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=16">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=30">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="top-level-step">COMPROMISED</span></td>
+                    <td width="100"><span class="top-level-step">3s 203ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="1-0"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-0')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1-0 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-0')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Given Juan opens the WordCounter website
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=18">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">642ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1-0" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-0-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan navigates to '/'
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=18">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-navigates-to-d8f9881b2f.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">368ms</span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="1-1"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-1')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1-1 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-1')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                When he enters a random text
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=19">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-whose-a77aff8dba.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-whose-a77aff8dba.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=24">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-16afb9c6f4.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-16afb9c6f4.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">872ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1-1" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-1-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan enters 'guess chronicle whose excluding though pollard' into the text area for words
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=20">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-whose-a77aff8dba.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-whose-a77aff8dba.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">147ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-1-1"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan waits until the word_count count value item does become visible
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=21">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-961f3ba9c2.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-waits-until-the-word-count-co-961f3ba9c2.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">180ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-1-2"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-1-2')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1-1-2 success-icon"
+                                   style="margin-left: 60px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-1-2')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Juan takes note of word_count
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=22">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-16afb9c6f4.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-16afb9c6f4.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=24">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-16afb9c6f4.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-word-count-16afb9c6f4.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">002ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1-1-2" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="110" class="step-icon">
+                        <a name="1-1-2-0"></a>
+                            <span style="margin-left: 80px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan takes note of initial_message
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=23">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-16afb9c6f4.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-initial-message-16afb9c6f4.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">001ms</span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="70" class="step-icon">
+                        <a name="1-2"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-2')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1-2 success-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-2')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                And he "remove" words in text
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=25">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-clicks-on-the-clear-button-673679733c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-clicks-on-the-clear-button-673679733c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                                <i class="bi bi-arrow-right"></i>
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=28">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-18a636f25a.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-18a636f25a.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-step">1s 212ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1-2" class="step-table-nested" style="display:none;">
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-2-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan clicks on the clear button
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=26">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-clicks-on-the-clear-button-673679733c.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-clicks-on-the-clear-button-673679733c.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">635ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-2-1"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan enters 'guess chronicle' into the text area for words
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=27">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-into-4a9d2bf970.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-enters-guess-chronicle-into-4a9d2bf970.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step">099ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-2-2"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan takes note of updated_counter
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="SUCCESS-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=28">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-18a636f25a.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-takes-note-of-updated-counter-18a636f25a.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">SUCCESS</span></td>
+                    <td width="100"><span class="nested-group-step"></span></td>
+                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                <tr class="test-COMPROMISED">
+
+                    <td width="70" class="step-icon">
+                        <a name="1-3"></a>
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-3')"
+                               style="display:block">
+                                <i class="bi bi-plus-square imgstepSection1-3 compromised-icon"
+                                   style="margin-left: 40px; float:left; padding-right:5px"></i>
+                            </a>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                            <a href="javaScript:void(0)" onClick="toggleDiv('stepSection1-3')"
+                               style="display:block;">
+                                <span class="nested-step">
+                                                Then the word count should be updated successfully
+                                        </span>
+                            </a>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="COMPROMISED-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=30">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-step">COMPROMISED</span></td>
+                    <td width="100"><span class="nested-step">457ms</span></td>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table id="stepSection1-3" class="step-table-nested" style="display:none;">
+                <tr class="test-COMPROMISED">
+
+                    <td width="90" class="step-icon">
+                        <a name="1-3-0"></a>
+                            <span style="margin-left: 60px;"
+                                  class="nested-group-icon"><a href='##beforetable'><i class='bi bi-slash-circle-fill compromised-icon ' title='COMPROMISED'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="nested-group-step">
+                                                Juan ensures that '2' does equal '0'
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                        <td width="160" class="COMPROMISED-text">
+
+                                <a href="9f59bfab549b73b4e59276ae65f96aaaa53d88686c24bf594ca732aa30d4cd80_screenshots.html#screenshots?screenshot=30">
+                                    <img src="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         href="photo-windows-chrome-121.0.6167.161-juan-ensures-that-2-does-equal-18a636f25a.png"
+                                         class="screenshot"
+                                         width="48" height="48"/>
+                                </a>
+                        </td>
+                    <td width="130"><span class="nested-group-step">COMPROMISED</span></td>
+                    <td width="100"><span class="nested-group-step">006ms</span></td>
+                </tr>
+                    <tr class="test-COMPROMISED">
+                        <td width="40">&nbsp</td>
+                        <td width="%" colspan="4" class="error-message-cell">
+
+
+    <div style="display:block">
+        <div class="table">
+            <div class="row">
+                <div class="col-sm-10" style="padding-left:1.5em; padding-top:0.5em; padding-bottom:0.5em;">
+                    <span class="error-message error-message-title">TestCompromisedError: The current word count: 0 is not equal to expeted count: 2<br>    at C:/Users/Juanse/Documents/LEARNING/js-wordcounter-web-automation/node_modules/@serenity-js/cucumber/src/adapter/CucumberCLIAdapter.ts:134:16</span>
+                </div>
+                <div class="col-sm-2">
+                    <a class="btn btn-warning details-button" data-toggle="collapse" href="#stacktraceModal-29"
+                       role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><i class="bi bi-eye"></i> More details</a>
+                </div>
+             </div>
+        </div>
+    <div>
+
+    <!-- Details Section -->
+    <div class="row stacktrace-details">
+      <div class="col">
+        <div class="collapse multi-collapse" id="stacktraceModal-29">
+            <div class="card">
+                <div class="card-header">
+                    <h4>TestCompromisedError </h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <pre>.(C:/Users/Juanse/Documents/LEARNING/js-wordcounter-web-automation/node_modules/@serenity-js/cucumber/src/adapter/CucumberCLIAdapter.ts:134)<br />.ErrorFactory.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\ErrorFactory.ts:35)<br />.Stage.createError()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\stage\Stage.ts:289)<br />.RaiseErrors.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\RaiseErrors.ts:59)<br />.DynamicallyGeneratedInteraction.interaction()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\assertions\src\Ensure.ts:165)<br />.processTicksAndRejections()(node:internal/process/task_queues:95)<br />.async PerformActivities.perform()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\screenplay\abilities\PerformActivities.ts:53)<br />.async Object.checkCount()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\src\questions\counter.ts:9)<br />.async World.<anonymous>()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\features\step-definitions\countWords.steps.ts:47)<br />.async wrapPromiseWithTimeout()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\time.ts:55)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\user_code_runner.ts:86)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\step_runner.ts:50)<br />.async TestCaseRunner.invokeStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:137)<br />.async TestCaseRunner.runStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:334)<br />.(async C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:240)<br />.async TestCaseRunner.aroundTestStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:170)<br />.async TestCaseRunner.runAttempt()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:218)<br />.(C:/Users/Juanse/Documents/LEARNING/js-wordcounter-web-automation/node_modules/@serenity-js/cucumber/src/adapter/CucumberCLIAdapter.ts:134)<br />.ErrorFactory.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\ErrorFactory.ts:35)<br />.Stage.createError()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\stage\Stage.ts:289)<br />.RaiseErrors.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\RaiseErrors.ts:59)<br />.Ensure.performAs()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\assertions\src\Ensure.ts:134)<br />.processTicksAndRejections()(node:internal/process/task_queues:95)<br />.async DynamicallyGeneratedInteraction.interaction()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\assertions\src\Ensure.ts:162)<br />.async PerformActivities.perform()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\screenplay\abilities\PerformActivities.ts:53)<br />.async Object.checkCount()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\src\questions\counter.ts:9)<br />.async World.<anonymous>()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\features\step-definitions\countWords.steps.ts:47)<br />.async wrapPromiseWithTimeout()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\time.ts:55)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\user_code_runner.ts:86)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\step_runner.ts:50)<br />.async TestCaseRunner.invokeStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:137)<br />.async TestCaseRunner.runStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:334)<br />.(async C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:240)<br />.async TestCaseRunner.aroundTestStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts:170)<br /></pre>
+                    </div>
+
+                    <h4>
+                        Caused by: AssertionError
+                    </h4>
+                    <div>
+                            <pre>Expected '2' to equal '0'<br><br>Expectation: equals('0')<br><br>Expected string: 0<br>Received string: 2<br><br>    at C:/Users/Juanse/Documents/LEARNING/js-wordcounter-web-automation/node_modules/@serenity-js/cucumber/src/adapter/CucumberCLIAdapter.ts:134:16</pre>
+                        <pre>.(C:/Users/Juanse/Documents/LEARNING/js-wordcounter-web-automation/node_modules/@serenity-js/cucumber/src/adapter/CucumberCLIAdapter.ts :134)<br />.ErrorFactory.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\ErrorFactory.ts :35)<br />.Stage.createError()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\stage\Stage.ts :289)<br />.RaiseErrors.create()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\errors\RaiseErrors.ts :59)<br />.Ensure.performAs()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\assertions\src\Ensure.ts :134)<br />.processTicksAndRejections()(node:internal/process/task_queues :95)<br />.async DynamicallyGeneratedInteraction.interaction()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\assertions\src\Ensure.ts :162)<br />.async PerformActivities.perform()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@serenity-js\core\src\screenplay\abilities\PerformActivities.ts :53)<br />.async Object.checkCount()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\src\questions\counter.ts :9)<br />.async World.<anonymous>()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\features\step-definitions\countWords.steps.ts :47)<br />.async wrapPromiseWithTimeout()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\time.ts :55)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\user_code_runner.ts :86)<br />.async Object.run()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\step_runner.ts :50)<br />.async TestCaseRunner.invokeStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts :137)<br />.async TestCaseRunner.runStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts :334)<br />.(async C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts :240)<br />.async TestCaseRunner.aroundTestStep()(C:\Users\Juanse\Documents\LEARNING\js-wordcounter-web-automation\node_modules\@cucumber\cucumber\src\runtime\test_case_runner.ts :170)<br /></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        </td>
+                    </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+            <tr class="test-COMPROMISED">
+                    <td colspan="3"></td>
+                <td width="130"><span class="top-level-step"><em>COMPROMISED</em></span></td>
+                <td width="100"><span class="top-level-step"><em>6.57s</em></span></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<div id="beforefooter"></div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="version">Serenity BDD version 3.1.0</span>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function toggleDiv(divId) {
+        $("#" + divId).toggle();
+        var imgsrc = $(".img" + divId).attr('src');
+        if (imgsrc == 'images/plus.png') {
+            $(".img" + divId).attr("src", function () {
+                return "images/minus.png";
+            });
+
+        } else {
+            $(".img" + divId).attr("src", function () {
+                return "images/plus.png";
+            });
+        }
+    }
+</script>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    $(document).ready(function () {
+        $('img.screenshot').imgPreview({
+            imgCSS: {
+                width: '500px'
+            },
+            distanceFromCursor: {top: 10, left: -200}
+        });
+    });
+
+    //]]>
+</script>
+<div id="imgPreviewContainer" style="position: absolute; top: 612px; left: 355px; display: none; " class=""><img
+            src="" style="display: none; "></div>
+<div id="imgPreviewContainer2" style="position: absolute; top: 925px; left: 320px; display: none; " class="">
+    <img style="width: 200px; display: none; " src=""></div>
+<div id="imgPreviewWithStyles" style="position: absolute; top: 1272px; left: 321px; display: none; " class="">
+    <img style="height: 200px; opacity: 1; display: none; " src=""></div>
+<div id="imgPreviewWithStyles2" style="display: none; position: absolute; "><img style="height: 200px; "></div>
+<div id="imgPreviewWithStyles3" style="display: none; position: absolute; "><img style="height: 200px; "></div>
+
+</div>
+</body>
+</html>

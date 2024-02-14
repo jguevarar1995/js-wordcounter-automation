@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Count Characters","Counting characters in a simple text","SUCCESS","2024-02-14T18:10:29.328-05:00[America/Bogota]","0.0","9.48"
+"Count Words","Counting words in a simple text","COMPROMISED","2024-02-14T18:10:49.894-05:00[America/Bogota]","0.0","11.81"
+"Count Words","Rendering word counting in a random text","COMPROMISED","2024-02-14T18:11:01.707-05:00[America/Bogota]","0.0","6.57"
+"Count Words","Validating the most repeated words","ERROR","2024-02-14T18:11:08.284-05:00[America/Bogota]","0.0","1.59"
